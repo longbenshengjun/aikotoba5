@@ -124,7 +124,7 @@ const ovr = document.getElementById('ovr');
 const TITLE = 'ナゾリンと がっこう たんけん';
 const PIN = '1031';                 // せんせいの ばんごう
 const PENALTY = 30;                 // まちがえたときに まつ びょうすう
-const ANSWER = 'かえらさん またきてね';
+const ANSWER = 'ありがとう またきてね';
 
 // ばしょ（0〜5）。QRコードの URL は ...?at=コード
 const PLACES = [
@@ -141,15 +141,15 @@ const GOAL = 5;
 // order … まわる じゅん（さいごは かならず たいいくかん）
 const TEAMS = {
   '1': { label:'1はん', kana:'ま', order:[0,1,2,3,4,5] },
-  '2': { label:'2はん', kana:'か', order:[1,2,3,4,0,5] },
+  '2': { label:'2はん', kana:'あ', order:[1,2,3,4,0,5] },
   '3': { label:'3はん', kana:'て', order:[2,3,4,0,1,5] },
-  '4': { label:'4はん', kana:'ら', order:[3,4,0,1,2,5] },
+  '4': { label:'4はん', kana:'が', order:[3,4,0,1,2,5] },
   '5': { label:'5はん', kana:'ね', order:[4,0,1,2,3,5] },
-  '6': { label:'6はん', kana:'さ', order:[0,4,3,2,1,5] },
+  '6': { label:'6はん', kana:'う', order:[0,4,3,2,1,5] },
   '7': { label:'7はん', kana:'き', order:[1,0,4,3,2,5] },
-  '8': { label:'8はん', kana:'え', order:[2,1,0,4,3,5] },
-  '9': { label:'9はん', kana:'ん', order:[3,2,1,0,4,5] },
-  'kaera': { label:'かえらさんの はん', kana:'た', order:[4,0,3,2,5] },
+  '8': { label:'8はん', kana:'り', order:[2,1,0,4,3,5] },
+  '9': { label:'9はん', kana:'と', order:[3,2,1,0,4,5] },
+  'kaera': { label:'かえらさんの はん', kana:'た', order:[5,4,2,3,1,5] },   // さいしょに たいいくかん（ろくぼく）、さいごに もどって もじ
 };
 const KAERA_KEY = 'kaera';
 
@@ -505,6 +505,17 @@ function bOk() {
 
 /* たいいくかん（ゴール）：ろくぼくで しゃしん */
 function goalQ() {
+  // ろくぼくを もう すませた はん（かえらさんの はん）は、もどってきたら すぐ もじ
+  if (team().order.indexOf(GOAL) < st.p) {
+    show(`
+      <div class="card" style="margin-top:30px">
+        <div class="placeicon">&#127941;</div>
+        <div class="q center" style="font-size:32px;color:#e05555">ゴール！ おかえり！</div>
+        <div class="q center" style="font-size:22px">ぜんぶの ばしょを まわったよ。</div>
+      </div>
+      <button class="btn btn-go" onclick="clearRoom()">もじを みる！</button>`);
+    return;
+  }
   show(`
     <div class="card">
       <span class="tag">たいいくかん の ミッション</span>
